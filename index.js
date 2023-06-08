@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// verifying jwt web token
+// verifying jwt web token [Todo: Do not finish verify......]
 
 const verifyJWT = (req, res, next) => {
     const authorization = req.headers.authorization;
@@ -61,7 +61,7 @@ async function run() {
         })
 
 
-        // users api
+        // users api.....
 
 
         app.get('/users', async (req, res) => {
@@ -81,6 +81,25 @@ async function run() {
             res.send(result)
 
         });
+
+
+        app.get('/users/admin/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+
+            if (req.decoded.email !== email) {
+                res.send({ admin: false })
+            }
+
+            const query = { email: email }
+            const user = await usersCollection.findOne(query);
+            const result = { admin: user?.role === 'admin' }
+            res.send(result);
+        })
+
+
+
+
+
 
         app.patch('/users/admin/:id', async (req, res) => {
 
