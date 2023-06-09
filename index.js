@@ -145,11 +145,22 @@ async function run() {
         // class api..........
 
 
+        app.get('/classes', async (req, res) => {
+            const result = await classesCollection.find().toArray();
+            res.send(result);
+
+        })
+
+
         app.post('/classes', async (req, res) => {
             const singleClass = req.body;
             const result = await classesCollection.insertOne(singleClass);
             res.send(result);
         });
+
+
+
+
 
 
         // Send a ping to confirm a successful connection
