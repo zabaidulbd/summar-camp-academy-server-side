@@ -160,6 +160,35 @@ async function run() {
 
 
 
+        app.patch('/classes/approve/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    status: 'approve'
+                },
+            };
+            const result = await classesCollection.updateOne(query, updateDoc);
+            res.send(result)
+        });
+
+
+        app.patch('/classes/deny/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    status: 'deny'
+                },
+            };
+            const result = await classesCollection.updateOne(query, updateDoc);
+            res.send(result)
+        });
+
+
+
 
 
 
