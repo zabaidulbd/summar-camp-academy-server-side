@@ -49,6 +49,7 @@ async function run() {
         await client.connect();
 
         const usersCollection = client.db("twelveDb").collection("users");
+        const classesCollection = client.db("twelveDb").collection("classes");
 
 
         // JWT.....
@@ -141,13 +142,14 @@ async function run() {
         });
 
 
+        // class api..........
 
 
-
-
-
-
-
+        app.post('/classes', async (req, res) => {
+            const singleClass = req.body;
+            const result = await classesCollection.insertOne(singleClass);
+            res.send(result);
+        });
 
 
         // Send a ping to confirm a successful connection
