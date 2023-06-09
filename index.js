@@ -50,6 +50,7 @@ async function run() {
 
         const usersCollection = client.db("twelveDb").collection("users");
         const classesCollection = client.db("twelveDb").collection("classes");
+        const selectedClassesCollection = client.db("twelveDb").collection("selectedClasses");
 
 
         // JWT.....
@@ -185,6 +186,16 @@ async function run() {
             };
             const result = await classesCollection.updateOne(query, updateDoc);
             res.send(result)
+        });
+
+
+
+        // selected class api........
+
+        app.post('/selectedclasses', async (req, res) => {
+            const selectedClass = req.body;
+            const result = await selectedClassesCollection.insertOne(selectedClass);
+            res.send(result);
         });
 
 
