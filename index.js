@@ -4,6 +4,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const app = express();
+const stripe = require('stripe')(process.env.PAYMENT_SECRET)
 const port = process.env.PORT || 5000;
 
 // middleware..........
@@ -18,10 +19,7 @@ const verifyJWT = (req, res, next) => {
     if (!authorization) {
         return res.status(401).send({ error: true, message: 'access denied' });
     }
-
-
     const token = authorization.split(' ')[1];
-
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).send({ error: true, message: 'access denied' })
@@ -219,9 +217,21 @@ async function run() {
             res.send(result)
         })
 
+        // payment.........
 
-
-
+        //payment intent
+        app.post('/create-payment-intent', verifyJWT, async (req, res) => {
+            const { price } = req.body;
+            const amount = parseInt(price * 100);
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            });
+            res.send({
+                clientSecret: paymentIntent.client_secret
+            })
+        })
 
 
         // Send a ping to confirm a successful connection
