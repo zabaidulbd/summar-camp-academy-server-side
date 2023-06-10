@@ -49,6 +49,7 @@ async function run() {
         const usersCollection = client.db("twelveDb").collection("users");
         const classesCollection = client.db("twelveDb").collection("classes");
         const selectedClassesCollection = client.db("twelveDb").collection("selectedClasses");
+        const paymentCollection = client.db("twelveDb").collection("payments");
 
 
         // JWT.....
@@ -232,6 +233,21 @@ async function run() {
                 clientSecret: paymentIntent.client_secret
             })
         })
+
+
+        app.post('/payments', verifyJWT, async (req, res) => {
+            const payment = req.body;
+            const insertResult = await paymentCollection.insertOne(payment);
+
+            const query = { _id: { $in: payment.classItems.map(id => new ObjectId(id)) } }
+            const deleteResult = await selectedClassesCollection.deleteOne(query)
+
+            res.send({ insertResult, deleteResult });
+        })
+
+
+
+
 
 
         // Send a ping to confirm a successful connection
