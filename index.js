@@ -159,6 +159,17 @@ async function run() {
         });
 
 
+        app.get('/myClasses', async (req, res) => {
+            const email = req.query.email;
+            if (!email) {
+                res.send([])
+            }
+            const query = { email: email };
+            const result = await classesCollection.find(query).toArray();
+            res.send(result);
+
+        });
+
 
         app.patch('/classes/approve/:id', async (req, res) => {
 
@@ -239,15 +250,12 @@ async function run() {
             const payment = req.body;
             const insertResult = await paymentCollection.insertOne(payment);
 
-            const query = { _id: { $in: payment.classItems.map(id => new ObjectId(id)) } }
-            const deleteResult = await selectedClassesCollection.deleteOne(query)
+            // const query = { _id: { $in: payment.classItems.map(id => new ObjectId(id)) } }
+            // const deleteResult = await selectedClassesCollection.deleteOne(query)
 
-            res.send({ insertResult, deleteResult });
+            // res.send({ insertResult, deleteResult });
+            res.send(insertResult);
         })
-
-
-
-
 
 
         // Send a ping to confirm a successful connection
