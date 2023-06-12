@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// verifying jwt web token [Todo: Do not finish verify......]
+// verifying jwt web token
 
 const verifyJWT = (req, res, next) => {
     const authorization = req.headers.authorization;
@@ -254,7 +254,6 @@ async function run() {
 
         // payment.........
 
-        //payment intent
         app.post('/create-payment-intent', verifyJWT, async (req, res) => {
             const { price } = req.body;
             const amount = parseInt(price * 100);
