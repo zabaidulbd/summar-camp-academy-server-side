@@ -245,13 +245,6 @@ async function run() {
         });
 
 
-
-
-
-
-
-
-
         app.delete('/selectedclasses/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -285,6 +278,12 @@ async function run() {
 
             // res.send({ insertResult, deleteResult });
             res.send(insertResult);
+        })
+
+
+        app.get('/payments', async (req, res) => {
+            const result = await paymentCollection.find().limit(6).toArray();
+            res.send(result)
         })
 
 
