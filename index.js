@@ -222,6 +222,25 @@ async function run() {
         });
 
 
+        app.get('/enrolledclasses', async (req, res) => {
+            const email = req.query.email;
+            if (!email) {
+                res.send([])
+            }
+            const query = { email: email };
+            const result = await paymentCollection.find(query).toArray();
+            res.send(result);
+
+        });
+
+
+
+
+
+
+
+
+
         app.delete('/selectedclasses/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
