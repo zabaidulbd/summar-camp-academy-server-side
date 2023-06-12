@@ -233,6 +233,17 @@ async function run() {
 
         });
 
+        app.get('/paymenthistory', async (req, res) => {
+            const email = req.query.email;
+            if (!email) {
+                res.send([])
+            }
+            const query = { email: email };
+            const result = await paymentCollection.find(query).toArray();
+            res.send(result);
+
+        });
+
 
 
 
